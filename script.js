@@ -73,6 +73,30 @@ const listings = [
         type: "Satılık",
         image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=500",
         features: ["Ana Cadde", "İşlek Konum", "Yatırımlık", "Geniş Vitrin"]
+    },
+    {
+        id: 7,
+        title: "Satılık İmarlı Arsa - Gebze",
+        location: "Pelitli Mah. / Gebze",
+        price: "2.800.000",
+        currency: "TL",
+        area: 500,
+        rooms: "Arsa",
+        type: "Arsa",
+        image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=500",
+        features: ["İmarlı", "Köşe Parsel", "Yatırımlık", "Konum Avantajı"]
+    },
+    {
+        id: 8,
+        title: "Satılık Villa Arsası - Çayırova",
+        location: "Akse Mah. / Çayırova",
+        price: "1.950.000",
+        currency: "TL",
+        area: 400,
+        rooms: "Arsa",
+        type: "Arsa",
+        image: "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=500",
+        features: ["Villa İmarı", "Sakin Konum", "Yatırım Fırsatı", "Temiz Tapu"]
     }
 ];
 
@@ -114,7 +138,7 @@ function createListingCard(listing) {
         <div class="card listing-card h-100 border-0 shadow-sm" onclick="goToListing(${listing.id})">
             <div class="position-relative">
                 <img src="${listing.image}" class="card-img-top" alt="${listing.title}">
-                <span class="badge ${listing.type === 'Satılık' ? 'bg-danger' : 'bg-primary'} position-absolute top-0 start-0 m-3">${listing.type}</span>
+                <span class="badge ${getBadgeClass(listing.type)} position-absolute top-0 start-0 m-3">${listing.type}</span>
             </div>
             <div class="card-body">
                 <h5 class="card-title fw-bold">${listing.title}</h5>
@@ -133,6 +157,16 @@ function createListingCard(listing) {
 // Format price with thousand separators
 function formatPrice(price) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+// Get badge class for listing type
+function getBadgeClass(type) {
+    switch(type) {
+        case 'Satılık': return 'bg-danger';
+        case 'Kiralık': return 'bg-primary';
+        case 'Arsa': return 'bg-success';
+        default: return 'bg-secondary';
+    }
 }
 
 // Navigate to listing detail
