@@ -339,6 +339,213 @@ const utils = {
     getCurrentPage: () => window.location.pathname.split('/').pop() || 'index.html'
 };
 
+// Hero Slider Functionality
+let currentSlideIndex = 0;
+const slides = document.querySelectorAll('.slide');
+const indicators = document.querySelectorAll('.indicator');
+let slideInterval;
+
+function showSlide(index) {
+    // Hide all slides
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+    
+    // Show current slide
+    if (slides[index]) {
+        slides[index].classList.add('active');
+    }
+    if (indicators[index % 5]) { // Only 5 indicators for 35 slides
+        indicators[index % 5].classList.add('active');
+    }
+    
+    currentSlideIndex = index;
+}
+
+function nextSlide() {
+    const nextIndex = (currentSlideIndex + 1) % slides.length;
+    showSlide(nextIndex);
+}
+
+function previousSlide() {
+    const prevIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
+    showSlide(prevIndex);
+}
+
+function changeSlide(direction) {
+    clearInterval(slideInterval);
+    
+    if (direction > 0) {
+        nextSlide();
+    } else {
+        previousSlide();
+    }
+    
+    // Restart auto-slide after manual navigation
+    startAutoSlide();
+}
+
+function currentSlide(index) {
+    clearInterval(slideInterval);
+    
+    // Map indicator index to slide groups
+    const slideGroupSize = Math.ceil(slides.length / 5);
+    const startIndex = (index - 1) * slideGroupSize;
+    showSlide(startIndex);
+    
+    startAutoSlide();
+}
+
+function startAutoSlide() {
+    slideInterval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
+}
+
+function stopAutoSlide() {
+    clearInterval(slideInterval);
+}
+
+// Initialize slider when DOM loads
+function initHeroSlider() {
+    if (slides.length > 0) {
+        showSlide(0);
+        startAutoSlide();
+        
+        // Pause auto-slide on hover
+        const sliderContainer = document.querySelector('.hero-slider-container');
+        if (sliderContainer) {
+            sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+            sliderContainer.addEventListener('mouseleave', startAutoSlide);
+        }
+    }
+}
+
+// Touch/Swipe support for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].screenX;
+}
+
+function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+}
+
+function handleSwipe() {
+    const swipeThreshold = 50;
+    const difference = touchStartX - touchEndX;
+    
+    if (Math.abs(difference) > swipeThreshold) {
+        if (difference > 0) {
+            // Swipe left - next slide
+            changeSlide(1);
+        } else {
+            // Swipe right - previous slide
+            changeSlide(-1);
+        }
+    }
+}
+
+// Add touch event listeners for mobile swipe
+function initTouchEvents() {
+    const sliderContainer = document.querySelector('.hero-slider-container');
+    if (sliderContainer) {
+        sliderContainer.addEventListener('touchstart', handleTouchStart, false);
+        sliderContainer.addEventListener('touchend', handleTouchEnd, false);
+    }
+}
+
+// Keyboard navigation
+function handleKeyDown(e) {
+    if (e.key === 'ArrowLeft') {
+        changeSlide(-1);
+    } else if (e.key === 'ArrowRight') {
+        changeSlide(1);
+    }
+}
+
+// Initialize everything when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize EmailJS
+    initEmailJS();
+    
+    // Initialize Hero Slider
+    initHeroSlider();
+    initTouchEvents();
+    
+    // Add keyboard navigation
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Search event listeners
+    if (searchButton) {
+        searchButton.addEventListener('click', function() {
+            const query = searchInput.value.trim();
+            if (query.length > 0) {
+                searchListings(query);
+            }
+        });
+    }
+    
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = searchInput.value.trim();
+                if (query.length > 0) {
+                    searchListings(query);
+                }
+            }
+        });
+    }
+    
+    // "Tümünü Gör" link
+    const showAllLink = document.querySelector('a[href="#"]');
+    if (showAllLink && showAllLink.textContent.includes('Tümünü Gör')) {
+        showAllLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAllListings();
+        });
+    }
+    
+    // Phone and WhatsApp links
+    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+    phoneLinks.forEach(link => {
+        link.addEventListener('click', callPhone);
+    });
+    
+    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
+    whatsappLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            openWhatsApp();
+        });
+    });
+    
+    // Contact form event listener
+    const contactForm = document.querySelector('#contactForm, form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactForm);
+    }
+    
+    // Listen for any text input that might be a message
+    const messageInputs = document.querySelectorAll('textarea, input[type="text"][placeholder*="mesaj"], input[type="text"][placeholder*="yorum"]');
+    messageInputs.forEach(input => {
+        const form = input.closest('form');
+        if (form && !form.hasAttribute('data-email-handled')) {
+            form.setAttribute('data-email-handled', 'true');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const message = input.value.trim();
+                if (message) {
+                    sendQuickMessage(message);
+                }
+            });
+        }
+    });
+    
+    console.log('Katipoğlu Gayrimenkul sitesi yüklendi!');
+    console.log(`Hero slider başlatıldı: ${slides.length} fotoğraf`);
+});
+
 // Export for other scripts if needed
 window.KatipogluGayrimenkul = {
     listings,
