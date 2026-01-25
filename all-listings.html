@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tüm İlanlarımız | Katipoğlu Gayrimenkul</title>
+    <meta name="description" content="Katipoğlu Gayrimenkul'un tüm satılık ve kiralık emlak ilanları. Zeytinburnu bölgesindeki en güncel fırsatlar.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Contact Bar -->
+    <div class="top-contact bg-light border-bottom py-2 d-none d-md-block">
+        <div class="container d-flex justify-content-between align-items-center">
+            <small class="text-muted"><i class="fas fa-map-marker-alt text-danger"></i> Kocaeli (Gebze, Çayırova, Dilovası, İzmit, Kandıra) & İstanbul (Sancaktepe) Uzmanı</small>
+            <div>
+                <a href="tel:+905305542001" class="text-dark text-decoration-none me-3 small"><i class="fas fa-phone"></i> 0 (530) 554 20 01</a>
+                <a href="https://wa.me/905528858792" class="text-success text-decoration-none small"><i class="fab fa-whatsapp"></i> WhatsApp Destek</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <img src="logo.png" alt="Katipoğlu Gayrimenkul Logo" class="logo-img me-2">KATİPOĞLU <span class="fw-light">GAYRİMENKUL</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="all-listings.html">Tüm İlanlar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">Hakkımızda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">İletişim</a></li>
+                </ul>
+            </div>
+            <div class="d-flex align-items-center">
+                <a href="https://katipoglugayrimenkul.sahibinden.com/" target="_blank" class="btn btn-outline-dark btn-sm">
+                    <img src="https://www.sahibinden.com/favicon.ico" width="16" class="me-1"> Mağazaya Git
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="bg-light py-4">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></li>
+                    <li class="breadcrumb-item active">Tüm İlanlar</li>
+                </ol>
+            </nav>
+            <h1 class="h2 mt-2 mb-0">Tüm İlanlarımız</h1>
+            <p class="text-muted mb-0">Kocaeli ve İstanbul bölgesindeki tüm emlak fırsatları</p>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <section class="container my-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label small">İlan Türü</label>
+                        <select class="form-select" id="filterType">
+                            <option value="">Tümü</option>
+                            <option value="Satılık">Satılık</option>
+                            <option value="Kiralık">Kiralık</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Minimum Fiyat</label>
+                        <input type="number" class="form-control" id="minPrice" placeholder="Min fiyat">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Maximum Fiyat</label>
+                        <input type="number" class="form-control" id="maxPrice" placeholder="Max fiyat">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small">Oda Sayısı</label>
+                        <select class="form-select" id="filterRooms">
+                            <option value="">Tümü</option>
+                            <option value="1+0">1+0</option>
+                            <option value="1+1">1+1</option>
+                            <option value="2+1">2+1</option>
+                            <option value="3+1">3+1</option>
+                            <option value="4+1">4+1</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button class="btn btn-danger me-2" id="applyFilters">Filtrele</button>
+                        <button class="btn btn-outline-secondary" id="clearFilters">Filtreleri Temizle</button>
+                        <span class="ms-3 text-muted" id="resultCount">Toplam: 0 ilan</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Listings Grid -->
+    <section class="container my-5">
+        <div class="row g-4" id="allListingsGrid">
+            <!-- Listings will be loaded here by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Load More Button -->
+    <section class="container text-center my-5">
+        <button class="btn btn-outline-danger btn-lg" id="loadMoreBtn" style="display: none;">
+            Daha Fazla Göster <i class="fas fa-arrow-down ms-2"></i>
+        </button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">KATİPOĞLU GAYRİMENKUL</h5>
+                    <p class="text-secondary">Zeytinburnu ve çevresinde 15 yıllık deneyimimizle güvenilir emlak hizmeti sunuyoruz.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white fs-5"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white fs-5"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white fs-5"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Hizmetlerimiz</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-secondary text-decoration-none">Satılık İlanlar</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Kiralık İlanlar</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Emlak Değerleme</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">Yatırım Danışmanlığı</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">İletişim</h5>
+                    <p class="text-secondary"><i class="fas fa-map-marker-alt me-2"></i> Ekber Yılmaz İş Merkezi</p>
+                    <p class="text-secondary small">Hacı Halil Mah. Adliye Cad. Güzeltepe İş Merkezi, D:34/c, 41455 Gebze/Kocaeli</p>
+                    <p class="text-secondary"><i class="fas fa-phone me-2"></i> 0 (5XX) XXX XX XX</p>
+                    <p class="text-secondary"><i class="fas fa-envelope me-2"></i> info@katipoglugayrimenkul.com</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 Katipoğlu Gayrimenkul. Tüm hakları saklıdır.</p>
+                <small class="text-secondary">Ekber Yılmaz İş Merkezi - Hacı Halil Mah. Adliye Cad. D:34/c, Gebze/Kocaeli</small><br>
+                <small class="text-secondary">Sahibinden Kurumsal Mağaza İş Ortaklığı</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script src="all-listings.js"></script>
+</body>
+</html>
