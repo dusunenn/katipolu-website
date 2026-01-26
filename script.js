@@ -4,7 +4,7 @@
 const listings = [
     {
         id: 1,
-        title: "3+1 Lüks Daire - Zeytinburnu Sahil",
+        title: "3+1 Lüks Daire - Zeytinburnu Sahil(TEST)",
         location: "Kazlıçeşme Mah. / Zeytinburnu",
         price: "12.500.000",
         currency: "TL",
@@ -16,7 +16,7 @@ const listings = [
     },
     {
         id: 2,
-        title: "Merkezi Konumda Ofis Katı",
+        title: "Merkezi Konumda Ofis Katı(TEST)",
         location: "Telsiz Mah. / Zeytinburnu",
         price: "45.000",
         currency: "TL",
@@ -28,7 +28,7 @@ const listings = [
     },
     {
         id: 3,
-        title: "Bahçeli Müstakil Ev Fırsatı",
+        title: "Bahçeli Müstakil Ev Fırsatı(TEST)",
         location: "Beştelsiz / Zeytinburnu",
         price: "8.750.000",
         currency: "TL",
@@ -40,7 +40,7 @@ const listings = [
     },
     {
         id: 4,
-        title: "Yeni Yapı 4+1 Dubleks",
+        title: "Yeni Yapı 4+1 Dubleks(TEST)",
         location: "Yeşiltepe Mah. / Zeytinburnu", 
         price: "15.200.000",
         currency: "TL",
@@ -52,7 +52,7 @@ const listings = [
     },
     {
         id: 5,
-        title: "Kiralık 2+1 Eşyalı Daire",
+        title: "Kiralık 2+1 Eşyalı Daire(TEST)",
         location: "Sümer Mah. / Zeytinburnu",
         price: "28.000",
         currency: "TL", 
@@ -64,7 +64,7 @@ const listings = [
     },
     {
         id: 6,
-        title: "Satılık Dükkan - Ana Cadde Üzeri",
+        title: "Satılık Dükkan - Ana Cadde Üzeri(TEST)",
         location: "Maltepe Mah. / Zeytinburnu",
         price: "4.500.000",
         currency: "TL",
@@ -76,7 +76,7 @@ const listings = [
     },
     {
         id: 7,
-        title: "Satılık İmarlı Arsa - Gebze",
+        title: "Satılık İmarlı Arsa - Gebze(TEST)",
         location: "Pelitli Mah. / Gebze",
         price: "2.800.000",
         currency: "TL",
@@ -88,7 +88,7 @@ const listings = [
     },
     {
         id: 8,
-        title: "Satılık Villa Arsası - Çayırova",
+        title: "Satılık Villa Arsası - Çayırova(TEST)",
         location: "Akse Mah. / Çayırova",
         price: "1.950.000",
         currency: "TL",
