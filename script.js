@@ -105,14 +105,29 @@ const searchInput = document.querySelector('input[type="text"]');
 const searchButton = document.querySelector('.btn-danger');
 const listingsContainer = document.querySelector('.row.g-4');
 
-// Search functionality
+// Search functionality with enhanced arsa support
 function searchListings(query) {
-    const filtered = listings.filter(listing => 
-        listing.title.toLowerCase().includes(query.toLowerCase()) ||
-        listing.location.toLowerCase().includes(query.toLowerCase()) ||
-        listing.rooms.toLowerCase().includes(query.toLowerCase()) ||
-        listing.type.toLowerCase().includes(query.toLowerCase())
-    );
+    const queryLower = query.toLowerCase();
+    const filtered = listings.filter(listing => {
+        // Basic search fields
+        const basicMatch = listing.title.toLowerCase().includes(queryLower) ||
+                          listing.location.toLowerCase().includes(queryLower) ||
+                          listing.rooms.toLowerCase().includes(queryLower) ||
+                          listing.type.toLowerCase().includes(queryLower);
+        
+        // Features search
+        const featureMatch = listing.features.some(feature => 
+            feature.toLowerCase().includes(queryLower)
+        );
+        
+        // Arsa specific searches
+        const arsaMatch = (queryLower.includes('arsa') && listing.type === 'Arsa') ||
+                         (queryLower.includes('imarlı') && listing.type === 'Arsa') ||
+                         (queryLower.includes('imar') && listing.type === 'Arsa') ||
+                         (queryLower.includes('villa arsası') && listing.features.includes('Villa İmarı'));
+        
+        return basicMatch || featureMatch || arsaMatch;
+    });
     
     displayListings(filtered);
 }
@@ -498,8 +513,13 @@ function handleKeyDown(e) {
     }
 }
 
-// Initialize everything when page loads
+// Initialize when DOM loads
 document.addEventListener('DOMContentLoaded', function() {
+    // Make listings globally available for other scripts
+    window.KatipogluGayrimenkul = {
+        listings: listings
+    };
+    
     // Initialize EmailJS
     initEmailJS();
     
