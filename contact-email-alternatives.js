@@ -30,7 +30,7 @@ Konu: ${formData.subject}
 Mesaj: ${formData.message}
     `;
     
-    const whatsappLink = `https://wa.me/905305542001?text=${encodeURIComponent(message)}`;
+    const whatsappLink = `https://wa.me/905528859792?text=${encodeURIComponent(message)}`;
     window.open(whatsappLink, '_blank');
 }
 

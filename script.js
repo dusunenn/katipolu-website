@@ -187,11 +187,11 @@ function showAllListings() {
 
 
 function callPhone() {
-    window.location.href = 'tel:+905305542001';
+    window.location.href = 'tel:+905528859792';
 }
 
 function openWhatsApp() {
-    window.open('https://wa.me/905305542001?text=Merhaba, emlak ilanlarınız hakkında bilgi almak istiyorum.', '_blank');
+    window.open('https://wa.me/905528859792?text=Merhaba, emlak ilanlarınız hakkında bilgi almak istiyorum.', '_blank');
 }
 
 const EMAIL_CONFIG = {
@@ -354,16 +354,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 let currentSlideIndex = 0;
-const slides = document.querySelectorAll('.slide');
-const indicators = document.querySelectorAll('.indicator');
+let slides = null;
+let indicators = null;
 let slideInterval;
 
 function showSlide(index) {
+    if (!slides) slides = document.querySelectorAll('.slide');
+    if (!indicators) indicators = document.querySelectorAll('.indicator');
+    
     slides.forEach(slide => slide.classList.remove('active'));
     indicators.forEach(indicator => indicator.classList.remove('active'));
     
     if (slides[index]) {
         slides[index].classList.add('active');
+        console.log(`Showing slide ${index}`);
     }
     if (indicators[index % 5]) {
         indicators[index % 5].classList.add('active');
@@ -373,11 +377,13 @@ function showSlide(index) {
 }
 
 function nextSlide() {
+    if (!slides) slides = document.querySelectorAll('.slide');
     const nextIndex = (currentSlideIndex + 1) % slides.length;
     showSlide(nextIndex);
 }
 
 function previousSlide() {
+    if (!slides) slides = document.querySelectorAll('.slide');
     const prevIndex = (currentSlideIndex - 1 + slides.length) % slides.length;
     showSlide(prevIndex);
 }
@@ -413,16 +419,25 @@ function stopAutoSlide() {
 }
 
 function initHeroSlider() {
-    if (slides.length > 0) {
-        showSlide(0);
-        startAutoSlide();
+    // DOM elementlerinin yüklenmesini biraz bekle
+    setTimeout(() => {
+        slides = document.querySelectorAll('.slide');
+        indicators = document.querySelectorAll('.indicator');
         
-        const sliderContainer = document.querySelector('.hero-slider-container');
-        if (sliderContainer) {
-            sliderContainer.addEventListener('mouseenter', stopAutoSlide);
-            sliderContainer.addEventListener('mouseleave', startAutoSlide);
+        if (slides && slides.length > 0) {
+            console.log(`${slides.length} slide found, starting slider...`);
+            showSlide(0);
+            startAutoSlide();
+            
+            const sliderContainer = document.querySelector('.hero-slider-container');
+            if (sliderContainer) {
+                sliderContainer.addEventListener('mouseenter', stopAutoSlide);
+                sliderContainer.addEventListener('mouseleave', startAutoSlide);
+            }
+        } else {
+            console.log('No slides found');
         }
-    }
+    }, 100);
 }
 
 let touchStartX = 0;
@@ -473,11 +488,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initEmailJS();
     
+    // Slider'ı başlat
     initHeroSlider();
     initTouchEvents();
     
+    // Klavye kontrollerini ekle
     document.addEventListener('keydown', handleKeyDown);
     
+    // Search buton event listener'ları
+    if (searchButton) {
         searchButton.addEventListener('click', function() {
             const query = searchInput.value.trim();
             if (query.length > 0) {
@@ -496,6 +515,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Diğer event listener'lar
+    const showAllLink = document.querySelector('a[href="#"]');
+    if (showAllLink && showAllLink.textContent.includes('Tümünü Gör')) {
+        showAllLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showAllListings();
+        });
+    }
+    
+    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+    phoneLinks.forEach(link => {
+        link.addEventListener('click', callPhone);
+    });
+    
+    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
+    whatsappLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            openWhatsApp();
+        });
+    });
+    
+    const contactForm = document.querySelector('#contactForm, form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactForm);
+    }
+    
+    const messageInputs = document.querySelectorAll('textarea, input[type="text"][placeholder*="mesaj"], input[type="text"][placeholder*="yorum"]');
+    messageInputs.forEach(input => {
+        const form = input.closest('form');
+        if (form && !form.hasAttribute('data-email-handled')) {
+            form.setAttribute('data-email-handled', 'true');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const message = input.value.trim();
+                if (message) {
+                    sendQuickMessage(message);
+                }
+            });
+        }
+    });
 });
 
 window.KatipogluGayrimenkul = {
