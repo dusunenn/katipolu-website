@@ -186,7 +186,7 @@ function toggleFavorite(id) {
 function callAboutListing(id) {
     const listing = window.KatipogluGayrimenkul.listings.find(l => l.id === id);
     if (listing) {
-        window.location.href = `tel:+905305542001`;
+        window.location.href = `tel:+905528858792`;
     }
 }
 
@@ -238,12 +238,11 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// Format price function
 function formatPrice(price) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Add CSS for toast animation
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {

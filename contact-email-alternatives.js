@@ -1,6 +1,3 @@
-// Alternatif Email Çözümleri - contact-email-alternatives.js
-
-// 1. Mailto yaklaşımı (EmailJS yerine kullanılabilir)
 function sendEmailViaMailto(formData) {
     const subject = `Katipoğlu Gayrimenkul - ${formData.subject || 'İletişim Formu'}`;
     const body = `
@@ -20,7 +17,7 @@ Bu mesaj Katipoğlu Gayrimenkul web sitesi üzerinden gönderilmiştir.
     window.open(mailtoLink);
 }
 
-// 2. WhatsApp alternativi
+
 function sendViaWhatsApp(formData) {
     const message = `
 Merhaba! Katipoğlu Gayrimenkul web sitesi üzerinden iletişime geçiyorum.
@@ -37,7 +34,6 @@ Mesaj: ${formData.message}
     window.open(whatsappLink, '_blank');
 }
 
-// 3. Form verilerini localStorage'a kaydetme (yedek)
 function saveFormData(formData) {
     const timestamp = new Date().toISOString();
     const savedData = {
@@ -49,11 +45,8 @@ function saveFormData(formData) {
     let savedForms = JSON.parse(localStorage.getItem('contactForms') || '[]');
     savedForms.push(savedData);
     localStorage.setItem('contactForms', JSON.stringify(savedForms));
-    
-    console.log('Form data saved to localStorage:', savedData);
 }
 
-// 4. Basit backend endpoint (gerekirse)
 async function sendToBackend(formData) {
     try {
         const response = await fetch('/api/contact', {
@@ -75,26 +68,18 @@ async function sendToBackend(formData) {
     }
 }
 
-// Ana fonksiyon - multiple fallback ile
 async function submitContactForm(formData) {
     try {
-        // Önce EmailJS deneyin
         await emailjs.send('your_service_id', 'your_template_id', formData);
         return { success: true, method: 'EmailJS' };
     } catch (emailError) {
         console.warn('EmailJS failed, trying alternatives:', emailError);
-        
         try {
-            // Backend'e göndermeyi deneyin
             await sendToBackend(formData);
             return { success: true, method: 'Backend' };
         } catch (backendError) {
             console.warn('Backend failed, using fallback methods:', backendError);
-            
-            // Verileri localStorage'a kaydedin
             saveFormData(formData);
-            
-            // Kullanıcıya seçenek sunun
             const useWhatsApp = confirm('Email gönderilemedi. WhatsApp ile gönderelim mi?');
             if (useWhatsApp) {
                 sendViaWhatsApp(formData);
@@ -107,7 +92,6 @@ async function submitContactForm(formData) {
     }
 }
 
-// Export for use
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         submitContactForm,

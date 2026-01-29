@@ -1,4 +1,3 @@
-// Listing Detail Page JavaScript
 let currentListing = null;
 let currentImageIndex = 0;
 let galleryImages = [];

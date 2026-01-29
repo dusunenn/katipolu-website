@@ -1,6 +1,4 @@
-// Katipoğlu Gayrimenkul - Ana JavaScript Dosyası
 
-// Sample listings data - Normally this would come from a database
 const listings = [
     {
         id: 1,
@@ -100,27 +98,23 @@ const listings = [
     }
 ];
 
-// DOM Elements
 const searchInput = document.querySelector('input[type="text"]');
 const searchButton = document.querySelector('.btn-danger');
 const listingsContainer = document.querySelector('.row.g-4');
 
-// Search functionality with enhanced arsa support
+
 function searchListings(query) {
     const queryLower = query.toLowerCase();
     const filtered = listings.filter(listing => {
-        // Basic search fields
         const basicMatch = listing.title.toLowerCase().includes(queryLower) ||
                           listing.location.toLowerCase().includes(queryLower) ||
                           listing.rooms.toLowerCase().includes(queryLower) ||
                           listing.type.toLowerCase().includes(queryLower);
         
-        // Features search
         const featureMatch = listing.features.some(feature => 
             feature.toLowerCase().includes(queryLower)
         );
         
-        // Arsa specific searches
         const arsaMatch = (queryLower.includes('arsa') && listing.type === 'Arsa') ||
                          (queryLower.includes('imarlı') && listing.type === 'Arsa') ||
                          (queryLower.includes('imar') && listing.type === 'Arsa') ||
@@ -132,7 +126,6 @@ function searchListings(query) {
     displayListings(filtered);
 }
 
-// Display listings
 function displayListings(listingsToShow) {
     if (!listingsContainer) return;
     
@@ -144,7 +137,7 @@ function displayListings(listingsToShow) {
     });
 }
 
-// Create listing card
+
 function createListingCard(listing) {
     const col = document.createElement('div');
     col.className = 'col-md-4';
@@ -169,12 +162,10 @@ function createListingCard(listing) {
     return col;
 }
 
-// Format price with thousand separators
 function formatPrice(price) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-// Get badge class for listing type
 function getBadgeClass(type) {
     switch(type) {
         case 'Satılık': return 'bg-danger';
@@ -184,19 +175,17 @@ function getBadgeClass(type) {
     }
 }
 
-// Navigate to listing detail
 function goToListing(id) {
     localStorage.setItem('selectedListing', id);
     window.location.href = 'listing-detail.html';
 }
 
-// Show all listings
 function showAllListings() {
     localStorage.setItem('showAllListings', 'true');
     window.location.href = 'all-listings.html';
 }
 
-// Contact functions
+
 function callPhone() {
     window.location.href = 'tel:+905305542001';
 }
@@ -205,16 +194,13 @@ function openWhatsApp() {
     window.open('https://wa.me/905305542001?text=Merhaba, emlak ilanlarınız hakkında bilgi almak istiyorum.', '_blank');
 }
 
-// Email configuration for contact form
 const EMAIL_CONFIG = {
-    serviceId: 'service_katipoglu', // You'll need to set this up in EmailJS
-    templateId: 'template_contact', // You'll need to create this template
-    publicKey: 'YOUR_PUBLIC_KEY' // You'll get this from EmailJS
+    serviceId: 'service_katipoglu',
+    templateId: 'template_contact',
+    publicKey: 'YOUR_PUBLIC_KEY'
 };
 
-// Initialize EmailJS when page loads
 function initEmailJS() {
-    // Load EmailJS if not already loaded
     if (typeof emailjs === 'undefined') {
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
@@ -227,7 +213,7 @@ function initEmailJS() {
     }
 }
 
-// Send contact form email
+
 function sendContactEmail(formData) {
     const templateParams = {
         from_name: formData.name || 'İsimsiz Ziyaretçi',
@@ -240,18 +226,15 @@ function sendContactEmail(formData) {
 
     return emailjs.send(EMAIL_CONFIG.serviceId, EMAIL_CONFIG.templateId, templateParams)
         .then((response) => {
-            console.log('Email sent successfully:', response);
             alert('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.');
             return true;
         })
         .catch((error) => {
-            console.error('Email send failed:', error);
             alert('Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin veya telefon ile iletişime geçin.');
             return false;
         });
 }
 
-// Handle contact form submission
 function handleContactForm(event) {
     event.preventDefault();
     
@@ -262,17 +245,15 @@ function handleContactForm(event) {
         message: event.target.message?.value || ''
     };
     
-    // Basic validation
     if (!formData.message.trim()) {
         alert('Lütfen bir mesaj yazın.');
         return;
     }
     
-    // Send email
     sendContactEmail(formData);
 }
 
-// Alternative function for simple text input (like newsletter or quick contact)
+
 function sendQuickMessage(message, senderInfo = {}) {
     const formData = {
         name: senderInfo.name || 'Web Sitesi Ziyaretçisi',
@@ -284,17 +265,15 @@ function sendQuickMessage(message, senderInfo = {}) {
     return sendContactEmail(formData);
 }
 
-// Smooth scrolling for anchor links
 function smoothScroll(target) {
     document.querySelector(target).scrollIntoView({
         behavior: 'smooth'
     });
 }
 
-// Newsletter subscription (updated to send email)
+
 function subscribeNewsletter(email) {
     if (email && email.includes('@')) {
-        // Send confirmation email
         sendQuickMessage(
             `Yeni bülten aboneliği: ${email}`,
             { email: email, name: 'Bülten Abonesi' }
@@ -307,12 +286,9 @@ function subscribeNewsletter(email) {
     return false;
 }
 
-// Initialize when DOM loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize EmailJS
     initEmailJS();
     
-    // Search event listeners
     if (searchButton) {
         searchButton.addEventListener('click', function() {
             const query = searchInput.value.trim();
@@ -333,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // "Tümünü Gör" link
     const showAllLink = document.querySelector('a[href="#"]');
     if (showAllLink && showAllLink.textContent.includes('Tümünü Gör')) {
         showAllLink.addEventListener('click', function(e) {
@@ -342,7 +317,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Phone and WhatsApp links
     const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
     phoneLinks.forEach(link => {
         link.addEventListener('click', callPhone);
@@ -356,13 +330,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Contact form event listener
     const contactForm = document.querySelector('#contactForm, form');
     if (contactForm) {
         contactForm.addEventListener('submit', handleContactForm);
     }
     
-    // Listen for any text input that might be a message
     const messageInputs = document.querySelectorAll('textarea, input[type="text"][placeholder*="mesaj"], input[type="text"][placeholder*="yorum"]');
     messageInputs.forEach(input => {
         const form = input.closest('form');
@@ -377,33 +349,23 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    
-    console.log('Katipoğlu Gayrimenkul sitesi yüklendi!');
 });
 
-// Utility functions
-const utils = {
-    formatCurrency: formatPrice,
-    scrollToTop: () => window.scrollTo({top: 0, behavior: 'smooth'}),
-    getCurrentPage: () => window.location.pathname.split('/').pop() || 'index.html'
-};
 
-// Hero Slider Functionality
+
 let currentSlideIndex = 0;
 const slides = document.querySelectorAll('.slide');
 const indicators = document.querySelectorAll('.indicator');
 let slideInterval;
 
 function showSlide(index) {
-    // Hide all slides
     slides.forEach(slide => slide.classList.remove('active'));
     indicators.forEach(indicator => indicator.classList.remove('active'));
     
-    // Show current slide
     if (slides[index]) {
         slides[index].classList.add('active');
     }
-    if (indicators[index % 5]) { // Only 5 indicators for 35 slides
+    if (indicators[index % 5]) {
         indicators[index % 5].classList.add('active');
     }
     
@@ -429,14 +391,12 @@ function changeSlide(direction) {
         previousSlide();
     }
     
-    // Restart auto-slide after manual navigation
     startAutoSlide();
 }
 
 function currentSlide(index) {
     clearInterval(slideInterval);
     
-    // Map indicator index to slide groups
     const slideGroupSize = Math.ceil(slides.length / 5);
     const startIndex = (index - 1) * slideGroupSize;
     showSlide(startIndex);
@@ -445,20 +405,18 @@ function currentSlide(index) {
 }
 
 function startAutoSlide() {
-    slideInterval = setInterval(nextSlide, 4000); // Change slide every 4 seconds
+    slideInterval = setInterval(nextSlide, 4000);
 }
 
 function stopAutoSlide() {
     clearInterval(slideInterval);
 }
 
-// Initialize slider when DOM loads
 function initHeroSlider() {
     if (slides.length > 0) {
         showSlide(0);
         startAutoSlide();
         
-        // Pause auto-slide on hover
         const sliderContainer = document.querySelector('.hero-slider-container');
         if (sliderContainer) {
             sliderContainer.addEventListener('mouseenter', stopAutoSlide);
@@ -467,7 +425,6 @@ function initHeroSlider() {
     }
 }
 
-// Touch/Swipe support for mobile
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -486,16 +443,13 @@ function handleSwipe() {
     
     if (Math.abs(difference) > swipeThreshold) {
         if (difference > 0) {
-            // Swipe left - next slide
             changeSlide(1);
         } else {
-            // Swipe right - previous slide
             changeSlide(-1);
         }
     }
 }
 
-// Add touch event listeners for mobile swipe
 function initTouchEvents() {
     const sliderContainer = document.querySelector('.hero-slider-container');
     if (sliderContainer) {
@@ -504,7 +458,6 @@ function initTouchEvents() {
     }
 }
 
-// Keyboard navigation
 function handleKeyDown(e) {
     if (e.key === 'ArrowLeft') {
         changeSlide(-1);
@@ -513,25 +466,18 @@ function handleKeyDown(e) {
     }
 }
 
-// Initialize when DOM loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Make listings globally available for other scripts
     window.KatipogluGayrimenkul = {
         listings: listings
     };
     
-    // Initialize EmailJS
     initEmailJS();
     
-    // Initialize Hero Slider
     initHeroSlider();
     initTouchEvents();
     
-    // Add keyboard navigation
     document.addEventListener('keydown', handleKeyDown);
     
-    // Search event listeners
-    if (searchButton) {
         searchButton.addEventListener('click', function() {
             const query = searchInput.value.trim();
             if (query.length > 0) {
@@ -550,61 +496,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
-    // "Tümünü Gör" link
-    const showAllLink = document.querySelector('a[href="#"]');
-    if (showAllLink && showAllLink.textContent.includes('Tümünü Gör')) {
-        showAllLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showAllListings();
-        });
-    }
-    
-    // Phone and WhatsApp links
-    const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
-    phoneLinks.forEach(link => {
-        link.addEventListener('click', callPhone);
-    });
-    
-    const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
-    whatsappLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            openWhatsApp();
-        });
-    });
-    
-    // Contact form event listener
-    const contactForm = document.querySelector('#contactForm, form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', handleContactForm);
-    }
-    
-    // Listen for any text input that might be a message
-    const messageInputs = document.querySelectorAll('textarea, input[type="text"][placeholder*="mesaj"], input[type="text"][placeholder*="yorum"]');
-    messageInputs.forEach(input => {
-        const form = input.closest('form');
-        if (form && !form.hasAttribute('data-email-handled')) {
-            form.setAttribute('data-email-handled', 'true');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const message = input.value.trim();
-                if (message) {
-                    sendQuickMessage(message);
-                }
-            });
-        }
-    });
-    
-    console.log('Katipoğlu Gayrimenkul sitesi yüklendi!');
-    console.log(`Hero slider başlatıldı: ${slides.length} fotoğraf`);
 });
 
-// Export for other scripts if needed
 window.KatipogluGayrimenkul = {
     listings,
     searchListings,
     displayListings,
-    goToListing,
-    utils
+    goToListing
 };
